@@ -1,134 +1,166 @@
 "use client"
 
-import { useState, useCallback, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ParallaxBackground } from "./parallax-background"
-import { NavigationArrows } from "./navigation-arrows"
-import { SlideIndicator } from "./slide-indicator"
-import { SlideOne } from "./slide-one"
-import { SlideTwo } from "./slide-two"
-import { SlideThree } from "./slide-three"
-import { SlideFour } from "./slide-four"
-import { SlideFive } from "./slide-five"
-import { SlideSix } from "./slide-six"
-import { SlideSeven } from "./slide-seven"
-import { SlideEight } from "./slide-eight"
-import { SlideNine } from "./slide-nine"
-import { SlideTen } from "./slide-ten"
-import { SlideEleven } from "./slide-eleven"
+import { ParallaxBackground } from "@/components/parallax-background"
+import { NavigationArrows } from "@/components/navigation-arrows"
+import { SlideIndicator } from "@/components/slide-indicator"
+import { ProgressBar } from "@/components/progress-bar"
+import { PresentationControls } from "@/components/presentation-controls"
+
+// Import new slides
+import { SlideOne } from "@/components/slide-one-new"
+import { SlideTwo } from "@/components/slide-two-new"
+import { SlideThree } from "@/components/slide-three-new"
+import { SlideFour } from "@/components/slide-four-new"
+import { SlideFive } from "@/components/slide-five-new"
+import { SlideSix } from "@/components/slide-six"
+import { SlideSeven } from "@/components/slide-seven"
+import { SlideEight } from "@/components/slide-eight"
+import { SlideNine } from "@/components/slide-nine"
+import { SlideTen } from "@/components/slide-ten"
+import { SlideEleven } from "@/components/slide-eleven"
 
 const slides = [
-  { id: 1, title: "Welcome to QS-GRC", component: SlideOne },
-  { id: 2, title: "The Current Challenge", component: SlideTwo },
-  { id: 3, title: "The QS-GRC Solution", component: SlideThree },
-  { id: 4, title: "Core Pillars", component: SlideFour },
-  { id: 5, title: "Proactive Compliance", component: SlideFive },
-  { id: 6, title: "Risk Intelligence", component: SlideSix },
-  { id: 7, title: "Operational Efficiency", component: SlideSeven },
-  { id: 8, title: "Transparency Foundation", component: SlideEight },
-  { id: 9, title: "Success Story", component: SlideNine },
-  { id: 10, title: "Implementation Roadmap", component: SlideTen },
-  { id: 11, title: "Get Started Today", component: SlideEleven },
+  { component: SlideOne, title: "The Future of Trust" },
+  { component: SlideTwo, title: "The Hidden Costs" },
+  { component: SlideThree, title: "One Platform" },
+  { component: SlideFour, title: "Core Pillars" },
+  { component: SlideFive, title: "AI Compliance" },
+  { component: SlideSix, title: "Predictive Risk" },
+  { component: SlideSeven, title: "Quantum Security" },
+  { component: SlideEight, title: "Trusted Transparency" },
+  { component: SlideNine, title: "Case Study" },
+  { component: SlideTen, title: "Implementation" },
+  { component: SlideEleven, title: "Call to Action" },
 ]
 
 export function Presentation() {
   const [currentSlide, setCurrentSlide] = useState(0)
-  const [isNavigating, setIsNavigating] = useState(false)
-  const [isAutoPlay, setIsAutoPlay] = useState(false)
+  const [direction, setDirection] = useState(0)
+  const [autoplay, setAutoplay] = useState(false)
 
-  const goToSlide = useCallback((index: number) => {
-    if (index >= 0 && index < slides.length && !isNavigating) {
-      setIsNavigating(true)
-      setCurrentSlide(index)
-      setTimeout(() => setIsNavigating(false), 500)
-    }
-  }, [isNavigating])
-
-  const goToNext = useCallback(() => {
+  const nextSlide = () => {
     if (currentSlide < slides.length - 1) {
-      goToSlide(currentSlide + 1)
+      setDirection(1)
+      setCurrentSlide(currentSlide + 1)
     }
-  }, [currentSlide, goToSlide])
+  }
 
-  const goToPrevious = useCallback(() => {
+  const prevSlide = () => {
     if (currentSlide > 0) {
-      goToSlide(currentSlide - 1)
+      setDirection(-1)
+      setCurrentSlide(currentSlide - 1)
     }
-  }, [currentSlide, goToSlide])
+  }
 
-  const toggleAutoPlay = useCallback(() => {
-    setIsAutoPlay(!isAutoPlay)
-  }, [isAutoPlay])
+  const goToSlide = (index: number) => {
+    if (index !== currentSlide) {
+      setDirection(index > currentSlide ? 1 : -1)
+      setCurrentSlide(index)
+    }
+  }
 
-  // Auto-play functionality
+  // Auto-advance slides
   useEffect(() => {
-    if (isAutoPlay && !isNavigating) {
-      const timer = setTimeout(() => {
-        if (currentSlide < slides.length - 1) {
-          goToNext()
-        } else {
-          setIsAutoPlay(false) // Stop at the last slide
-        }
-      }, 8000) // 8 seconds per slide
+    if (!autoplay) return
+    
+    const timer = setInterval(() => {
+      if (currentSlide < slides.length - 1) {
+        nextSlide()
+      } else {
+        setAutoplay(false)
+      }
+    }, 10000) // 10 seconds per slide
 
-      return () => clearTimeout(timer)
-    }
-  }, [isAutoPlay, currentSlide, isNavigating, goToNext])
+    return () => clearInterval(timer)
+  }, [currentSlide, autoplay])
 
   // Keyboard navigation
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (isNavigating) return
-
-      switch (event.key) {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      switch (e.key) {
         case "ArrowRight":
-        case " ": // Spacebar
-          event.preventDefault()
-          goToNext()
+        case " ":
+          e.preventDefault()
+          nextSlide()
           break
         case "ArrowLeft":
-          event.preventDefault()
-          goToPrevious()
+          e.preventDefault()
+          prevSlide()
           break
         case "Home":
-          event.preventDefault()
+          e.preventDefault()
           goToSlide(0)
           break
         case "End":
-          event.preventDefault()
+          e.preventDefault()
           goToSlide(slides.length - 1)
           break
+        case "p":
+        case "P":
+          e.preventDefault()
+          setAutoplay(!autoplay)
+          break
         case "Escape":
-          event.preventDefault()
-          setIsAutoPlay(false)
+          e.preventDefault()
+          setAutoplay(false)
           break
       }
     }
 
-    window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [goToNext, goToPrevious, goToSlide, isNavigating])
+    window.addEventListener("keydown", handleKeyPress)
+    return () => window.removeEventListener("keydown", handleKeyPress)
+  }, [currentSlide, autoplay])
+
+  const slideVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? "100%" : "-100%",
+      opacity: 0,
+      scale: 0.95,
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1,
+      scale: 1,
+    },
+    exit: (direction: number) => ({
+      zIndex: 0,
+      x: direction < 0 ? "100%" : "-100%",
+      opacity: 0,
+      scale: 0.95,
+    }),
+  }
 
   const CurrentSlideComponent = slides[currentSlide].component
 
   return (
     <div className="relative w-full h-screen overflow-hidden bg-slate-900">
-      {/* Background */}
-      <ParallaxBackground currentSlide={currentSlide} />
+      {/* Animated Background */}
+      <div className="absolute inset-0">
+        <ParallaxBackground currentSlide={currentSlide} />
+      </div>
 
-      {/* Main Content */}
-      <div className="relative z-10 w-full h-full">
-        <AnimatePresence mode="wait">
+      {/* Progress Bar */}
+      <ProgressBar current={currentSlide + 1} total={slides.length} />
+
+      {/* Main Slide Container */}
+      <div className="relative w-full h-full">
+        <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={currentSlide}
-            initial={{ opacity: 0, x: 300 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -300 }}
-            transition={{ 
-              duration: 0.5, 
-              ease: "easeInOut" 
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.4 },
+              scale: { duration: 0.4 },
             }}
-            className="w-full h-full"
+            className="absolute inset-0"
           >
             <CurrentSlideComponent />
           </motion.div>
@@ -137,47 +169,45 @@ export function Presentation() {
 
       {/* Navigation Controls */}
       <NavigationArrows
-        onNext={goToNext}
-        onPrevious={goToPrevious}
-        canGoNext={currentSlide < slides.length - 1}
+        onPrevious={prevSlide}
+        onNext={nextSlide}
         canGoPrevious={currentSlide > 0}
-        isNavigating={isNavigating}
+        canGoNext={currentSlide < slides.length - 1}
+        isNavigating={false}
       />
 
-      {/* Slide Indicator */}
+      {/* Slide Indicators */}
       <SlideIndicator
-        slides={slides}
+        slides={slides.map((slide, index) => ({ id: index, title: slide.title }))}
         currentSlide={currentSlide}
         onGoToSlide={goToSlide}
-        isNavigating={isNavigating}
+        isNavigating={false}
       />
 
-      {/* Slide Counter (top-right) */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.5 }}
-        className="fixed top-6 right-6 z-40 bg-slate-900/90 backdrop-blur-sm border border-slate-700/50 rounded-lg px-4 py-2"
-      >
-        <div className="text-white text-sm font-medium">
-          {currentSlide + 1} / {slides.length}
-        </div>
-      </motion.div>
+      {/* Presentation Controls */}
+      <PresentationControls
+        currentSlide={currentSlide}
+        totalSlides={slides.length}
+        onPrevious={prevSlide}
+        onNext={nextSlide}
+        onGoToSlide={goToSlide}
+        isAutoPlay={autoplay}
+        onToggleAutoPlay={() => setAutoplay(!autoplay)}
+        slides={slides.map((slide, index) => ({ id: index, title: slide.title }))}
+      />
 
-      {/* Auto-play indicator */}
-      {isAutoPlay && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed top-6 left-6 z-40 bg-cyan-500/20 backdrop-blur-sm border border-cyan-500/50 rounded-lg px-4 py-2"
-        >
-          <div className="text-cyan-300 text-sm font-medium flex items-center">
-            <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse mr-2"></div>
-            Auto-playing
-          </div>
-        </motion.div>
-      )}
+      {/* Keyboard Shortcuts Help */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2 }}
+        className="absolute bottom-4 left-4 text-xs text-slate-500 space-y-1"
+      >
+        <div>→ / Space: Next slide</div>
+        <div>← : Previous slide</div>
+        <div>P: Toggle autoplay</div>
+        <div>Home/End: First/Last slide</div>
+      </motion.div>
     </div>
   )
 }
