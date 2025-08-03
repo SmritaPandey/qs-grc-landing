@@ -4,16 +4,15 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ParallaxBackground } from "@/components/parallax-background"
 import { NavigationArrows } from "@/components/navigation-arrows"
-import { SlideIndicator } from "@/components/slide-indicator"
 import { ProgressBar } from "@/components/progress-bar"
 import { PresentationControls } from "@/components/presentation-controls"
 
-// Import new slides
-import { SlideOne } from "@/components/slide-one-new"
-import { SlideTwo } from "@/components/slide-two-new"
-import { SlideThree } from "@/components/slide-three-new"
-import { SlideFour } from "@/components/slide-four-new"
-import { SlideFive } from "@/components/slide-five-new"
+// Import slides
+import { SlideOne } from "@/components/slide-one"
+import { SlideTwo } from "@/components/slide-two"
+import { SlideThree } from "@/components/slide-three"
+import { SlideFour } from "@/components/slide-four"
+import { SlideFive } from "@/components/slide-five"
 import { SlideSix } from "@/components/slide-six"
 import { SlideSeven } from "@/components/slide-seven"
 import { SlideEight } from "@/components/slide-eight"
@@ -146,7 +145,7 @@ export function Presentation() {
       <ProgressBar current={currentSlide + 1} total={slides.length} />
 
       {/* Main Slide Container */}
-      <div className="relative w-full h-full">
+      <div className="relative w-full h-full overflow-hidden">
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={currentSlide}
@@ -160,9 +159,11 @@ export function Presentation() {
               opacity: { duration: 0.4 },
               scale: { duration: 0.4 },
             }}
-            className="absolute inset-0"
+            className="absolute inset-0 w-full h-full overflow-y-auto scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-800"
           >
-            <CurrentSlideComponent />
+            <div className="min-h-full">
+              <CurrentSlideComponent />
+            </div>
           </motion.div>
         </AnimatePresence>
       </div>
@@ -173,14 +174,6 @@ export function Presentation() {
         onNext={nextSlide}
         canGoPrevious={currentSlide > 0}
         canGoNext={currentSlide < slides.length - 1}
-        isNavigating={false}
-      />
-
-      {/* Slide Indicators */}
-      <SlideIndicator
-        slides={slides.map((slide, index) => ({ id: index, title: slide.title }))}
-        currentSlide={currentSlide}
-        onGoToSlide={goToSlide}
         isNavigating={false}
       />
 
