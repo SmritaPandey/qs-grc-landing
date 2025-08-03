@@ -2,7 +2,7 @@
   "name": "qs-grc-landing",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://yourusername.github.io/qs-grc-landing",
+  "homepage": "https://SmritaPandey.github.io/qs-grc-landing",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
