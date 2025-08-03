@@ -2,13 +2,10 @@
   "name": "qs-grc-landing",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://SmritaPandey.github.io/qs-grc-landing",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "export": "next build",
-    "deploy": "npm run build && touch out/.nojekyll && npx gh-pages -d out",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "type-check": "tsc --noEmit",
@@ -32,21 +29,21 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@next/bundle-analyzer": "^15.1.3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "cross-env": "^7.0.3",
     "eslint": "^9",
     "eslint-config-next": "15.2.4",
-    "gh-pages": "^6.3.0",
     "tailwindcss": "^4.1.11",
     "tw-animate-css": "^1.3.6",
-    "typescript": "^5"
+    "typescript": "^5",
+    "cross-env": "^7.0.3",
+    "@next/bundle-analyzer": "^15.1.3"
   },
   "engines": {
     "node": ">=18.17.0",
     "npm": ">=9.0.0"
-  }
+  },
+  "homepage": "https://smritapandey.github.io/qs-grc-landing"
 }
