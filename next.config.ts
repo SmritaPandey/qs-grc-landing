@@ -6,8 +6,6 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: process.env.NODE_ENV === 'production' ? '/qs-grc-landing' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/qs-grc-landing' : '',
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
@@ -18,6 +16,13 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   compress: true,
   generateEtags: false,
+  httpAgentOptions: {
+    keepAlive: true,
+  },
+  onDemandEntries: {
+    maxInactiveAge: 25 * 1000,
+    pagesBufferLength: 2,
+  },
   webpack: (config, { dev, isServer }) => {
     if (!dev && !isServer) {
       config.optimization.splitChunks.chunks = 'all';
