@@ -41,7 +41,7 @@ export function SlideTwo() {
             {/* Left Side - Title and Description */}
             <div className="space-y-6">
               <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1 }}>
-                <h1 className="text-4xl font-black mb-4">
+                <h1 className="display-2 font-black mb-4">
                   <span className="text-red-400">The Hidden Costs</span>
                   <br />
                   <span className="text-white">of Disconnected</span>
@@ -71,12 +71,12 @@ export function SlideTwo() {
                 transition={{ duration: 1, delay: 0.6 }}
                 className="grid grid-cols-2 gap-4"
               >
-                {[
-                  { number: "$2.3B", label: "Annual Waste", color: "red" },
-                  { number: "67%", label: "Slower Response", color: "orange" },
-                  { number: "45%", label: "Higher Costs", color: "yellow" },
-                  { number: "3.2/5", label: "Public Trust", color: "red" },
-                ].map((stat, index) => (
+                {([
+                  { number: "$2.3B", label: "Annual Waste", color: "pink" as const },
+                  { number: "67%", label: "Slower Response", color: "indigo" as const },
+                  { number: "45%", label: "Higher Costs", color: "yellow" as const },
+                  { number: "3.2/5", label: "Public Trust", color: "pink" as const },
+                ]).map((stat, index) => (
                   <motion.div
                     key={stat.label}
                     initial={{ opacity: 0, y: 30 }}
@@ -84,7 +84,7 @@ export function SlideTwo() {
                     transition={{ duration: 0.8, delay: 0.8 + index * 0.1 }}
                   >
                     <Card3D glowColor={stat.color} className="p-3 text-center">
-                      <div className={`text-xl font-black text-${stat.color}-400 mb-1`}>{stat.number}</div>
+                      <div className={`text-xl font-black ${stat.color === 'pink' ? 'text-pink-400' : stat.color === 'indigo' ? 'text-indigo-400' : 'text-yellow-400'} mb-1`}>{stat.number}</div>
                       <div className="text-slate-300 text-sm font-medium">{stat.label}</div>
                     </Card3D>
                   </motion.div>
@@ -102,7 +102,7 @@ export function SlideTwo() {
                   transition={{ duration: 0.8, delay: 1 + index * 0.1 }}
                   className="h-full"
                 >
-                  <Card3D glowColor="red" className="h-full p-4 text-center flex flex-col justify-center">
+                  <Card3D glowColor="pink" className="h-full p-4 text-center flex flex-col justify-center">
                     <div className={`w-8 h-8 bg-gradient-to-r ${problem.color} rounded-lg flex items-center justify-center mx-auto mb-3`}>
                       <problem.icon className="w-4 h-4 text-white" />
                     </div>

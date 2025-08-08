@@ -4,7 +4,6 @@ import { motion } from "framer-motion"
 import { TrendingUp, Clock, Users, BarChart3, Target, Zap } from "lucide-react"
 import { AnimatedChart } from "@/components/animated-chart"
 import { Card3D } from "@/components/3d-card"
-import { SplineElement } from "@/components/spline-element"
 
 export function SlideSeven() {
   const efficiencyData = [
@@ -93,7 +92,20 @@ export function SlideSeven() {
                 transition={{ duration: 1, delay: 0.4 }}
                 className="relative"
               >
-                <SplineElement type="torus" size={200} />
+                <motion.div 
+                  className="w-48 h-48 rounded-full border-8 border-transparent bg-gradient-to-r from-cyan-400/20 via-transparent to-blue-600/20 backdrop-blur-sm"
+                  style={{ 
+                    background: "conic-gradient(from 0deg, rgba(6, 182, 212, 0.3), rgba(59, 130, 246, 0.3), rgba(147, 51, 234, 0.3), rgba(6, 182, 212, 0.3))"
+                  }}
+                  animate={{ 
+                    rotate: [0, 360]
+                  }}
+                  transition={{ 
+                    duration: 8, 
+                    repeat: Infinity, 
+                    ease: "linear" 
+                  }}
+                />
 
                 {/* Floating efficiency indicators */}
                 <div className="absolute -top-8 -left-8">

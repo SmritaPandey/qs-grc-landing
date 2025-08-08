@@ -4,6 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* No fixed header now */
+  --header-height: 0rem;
   --font-roboto: 'Roboto', system-ui, -apple-system, sans-serif;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -38,6 +40,33 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  
+  /* Enhanced Typography Scale */
+  --font-size-xs: 0.75rem;      /* 12px */
+  --font-size-sm: 0.875rem;     /* 14px */
+  --font-size-base: 1rem;       /* 16px */
+  --font-size-lg: 1.125rem;     /* 18px */
+  --font-size-xl: 1.25rem;      /* 20px */
+  --font-size-2xl: 1.5rem;      /* 24px */
+  --font-size-3xl: 1.875rem;    /* 30px */
+  --font-size-4xl: 2.25rem;     /* 36px */
+  --font-size-5xl: 3rem;        /* 48px */
+  --font-size-6xl: 3.75rem;     /* 60px */
+  --font-size-7xl: 4.5rem;      /* 72px */
+  --font-size-8xl: 6rem;        /* 96px */
+  --font-size-9xl: 8rem;        /* 128px */
+  
+  /* Enhanced Spacing Scale */
+  --spacing-xs: 0.5rem;    /* 8px */
+  --spacing-sm: 0.75rem;   /* 12px */
+  --spacing-md: 1rem;      /* 16px */
+  --spacing-lg: 1.5rem;    /* 24px */
+  --spacing-xl: 2rem;      /* 32px */
+  --spacing-2xl: 2.5rem;   /* 40px */
+  --spacing-3xl: 3rem;     /* 48px */
+  --spacing-4xl: 4rem;     /* 64px */
+  --spacing-5xl: 5rem;     /* 80px */
+  --spacing-6xl: 6rem;     /* 96px */
 }
 
 .dark {
@@ -130,9 +159,8 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-roboto);
-    font-weight: 700;
-    line-height: 1.2;
+    font-weight: 800; /* slightly bolder for clearer hierarchy */
+    line-height: 1.15;
   }
 
   p {
@@ -144,6 +172,32 @@
     font-family: var(--font-roboto);
     font-weight: 500;
   }
+
+  /* Focus styles */
+  :focus-visible {
+    outline: 3px solid rgba(6, 182, 212, 0.6);
+    outline-offset: 2px;
+  }
+}
+
+/* Utilities */
+.section-padding { padding: 6rem 2rem; }
+.container-fluid { max-width: 1280px; margin: 0 auto; }
+
+@media (max-width: 768px) {
+  .section-padding { padding: 4rem 1.25rem; }
+}
+
+/* Anchor targets offset (no header) */
+[id] { scroll-margin-top: 0.5rem; }
+h1[id], h2[id], h3[id], h4[id], h5[id], h6[id], section[id] { scroll-margin-top: 0.5rem; }
+
+/* Ensure tap targets >=44px */
+.tap-target { min-height: 44px; min-width: 44px; }
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
 
 /* Enhanced Scrollbar Styling */
@@ -168,6 +222,10 @@
   transform: scale(1.05);
 }
 
+/* Hide scrollbar buttons and corner to avoid stray top-right box */
+::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+::-webkit-scrollbar-corner { background: transparent; }
+
 /* Firefox scrollbar */
 * {
   scrollbar-width: thin;
@@ -175,10 +233,7 @@
 }
 
 /* Smooth scrolling improvements */
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 2rem;
-}
+html { scroll-behavior: smooth; scroll-padding-top: 0rem; }
 
 /* Prevent horizontal overflow */
 body {
@@ -244,6 +299,37 @@ body {
   background-clip: text;
   font-weight: 700;
 }
+
+/* Display utilities for responsive headings */
+.display-hero {
+  font-size: clamp(1.75rem, 1.2rem + 2.0vw, 3.2rem);
+  line-height: 1.08;
+}
+.display-1 {
+  font-size: clamp(1.5rem, 1rem + 1.6vw, 2.7rem);
+  line-height: 1.14;
+}
+.display-2 {
+  font-size: clamp(1.2rem, 0.9rem + 1.2vw, 2.3rem);
+  line-height: 1.2;
+}
+.display-3 {
+  font-size: clamp(1rem, 0.85rem + 0.8vw, 1.75rem);
+  line-height: 1.25;
+}
+
+/* Global typography wrapper */
+.typo {
+  --leading: 1.6;
+  --tracking: 0.01em;
+}
+.typo h1 { font-size: clamp(1.75rem, 1rem + 2.8vw, 3.5rem); line-height: 1.1; letter-spacing: -0.01em; }
+.typo h2 { font-size: clamp(1.5rem, 1rem + 2.2vw, 3rem); line-height: 1.15; letter-spacing: -0.005em; }
+.typo h3 { font-size: clamp(1.25rem, 0.9rem + 1.6vw, 2.25rem); line-height: 1.2; }
+.typo h4 { font-size: clamp(1rem, 0.85rem + 1.05vw, 1.8rem); line-height: 1.25; }
+.typo p, .typo li { font-size: clamp(0.9rem, 0.86rem + 0.3vw, 1.05rem); line-height: var(--leading); letter-spacing: var(--tracking); }
+.typo small { font-size: clamp(0.78rem, 0.74rem + 0.12vw, 0.88rem); }
+.typo .lead { font-size: clamp(1rem, 0.95rem + 0.6vw, 1.25rem); line-height: 1.5; }
 
 /* Improved Glass morphism effect */
 .glass {

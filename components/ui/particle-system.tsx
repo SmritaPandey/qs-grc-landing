@@ -18,6 +18,12 @@ interface ParticleSystemProps {
   speed?: number
 }
 
+// Deterministic random function to avoid hydration mismatch
+function seededRandom(seed: number): number {
+  const x = Math.sin(seed) * 10000
+  return x - Math.floor(x)
+}
+
 export function ParticleSystem({ 
   count = 30, 
   colors = ["cyan", "blue", "purple"], 
@@ -25,22 +31,29 @@ export function ParticleSystem({
   speed = 1 
 }: ParticleSystemProps) {
   const [particles, setParticles] = useState<Particle[]>([])
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  useEffect(() => {
+    if (!isClient) return
+    
     const newParticles: Particle[] = []
     for (let i = 0; i < count; i++) {
       newParticles.push({
         id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: Math.random() * maxSize + 1,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        speed: Math.random() * speed + 0.5,
-        direction: Math.random() * 360
+        x: seededRandom(i * 1234) * 100,
+        y: seededRandom(i * 5678) * 100,
+        size: seededRandom(i * 9012) * maxSize + 1,
+        color: colors[Math.floor(seededRandom(i * 3456) * colors.length)],
+        speed: seededRandom(i * 7890) * speed + 0.5,
+        direction: seededRandom(i * 2345) * 360
       })
     }
     setParticles(newParticles)
-  }, [count, colors, maxSize, speed])
+  }, [count, colors, maxSize, speed, isClient])
 
   const colorMap = {
     cyan: "#06b6d4",
@@ -53,7 +66,7 @@ export function ParticleSystem({
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      {particles.map((particle) => (
+      {isClient && particles.map((particle) => (
         <motion.div
           key={particle.id}
           className="absolute rounded-full opacity-60"
@@ -85,7 +98,7 @@ export function ParticleSystem({
             duration: 15 / particle.speed,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: Math.random() * 5,
+            delay: seededRandom(particle.id * 4321) * 5,
           }}
         />
       ))}

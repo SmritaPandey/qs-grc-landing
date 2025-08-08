@@ -1,35 +1,38 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { useState, useEffect } from "react"
+import { useMemo, useState, useEffect } from "react"
 
 interface ParallaxBackgroundProps {
   currentSlide: number
 }
 
+// Deterministic random function to avoid hydration mismatch
+function seededRandom(seed: number): number {
+  const x = Math.sin(seed) * 10000
+  return x - Math.floor(x)
+}
+
 export function ParallaxBackground({ currentSlide }: ParallaxBackgroundProps) {
-  const [backgroundElements, setBackgroundElements] = useState<Array<{
-    id: number;
-    x: number;
-    y: number;
-    size: number;
-    speed: number;
-    color: string;
-  }>>([])
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  const backgroundElements = useMemo(() => {
     const elements = []
     for (let i = 0; i < 15; i++) {
       elements.push({
         id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: Math.random() * 3 + 1,
-        speed: Math.random() * 0.5 + 0.1,
-        color: ["cyan", "blue", "purple", "indigo"][Math.floor(Math.random() * 4)],
+        x: seededRandom(i * 123) * 100,
+        y: seededRandom(i * 456) * 100,
+        size: seededRandom(i * 789) * 3 + 1,
+        speed: seededRandom(i * 321) * 0.5 + 0.1,
+        color: ["cyan", "blue", "purple", "indigo"][Math.floor(seededRandom(i * 654) * 4)],
       })
     }
-    setBackgroundElements(elements)
+    return elements
   }, [])
 
   const getSlideColor = (slide: number) => {
@@ -68,30 +71,33 @@ export function ParallaxBackground({ currentSlide }: ParallaxBackgroundProps) {
         />
       </div>
 
-      {/* Floating Particles */}
-      {backgroundElements.length > 0 && backgroundElements.map((element) => (
-        <motion.div
-          key={element.id}
-          className={`absolute rounded-full bg-${element.color}-400/20`}
-          style={{
-            left: `${element.x}%`,
-            top: `${element.y}%`,
-            width: `${element.size}px`,
-            height: `${element.size}px`,
-          }}
-          animate={{
-            y: [0, -15, 0],
-            opacity: [0.2, 0.6, 0.2],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-            duration: 4 + element.speed * 2,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: "easeInOut",
-            delay: element.id * 0.2,
-          }}
-        />
-      ))}
+      {/* Floating Particles (safe class mapping) */}
+      {isClient && backgroundElements.map((element) => {
+        const colorClass = element.color === 'cyan' ? 'bg-cyan-400/20' : element.color === 'blue' ? 'bg-blue-400/20' : element.color === 'purple' ? 'bg-purple-400/20' : 'bg-indigo-400/20'
+        return (
+          <motion.div
+            key={element.id}
+            className={`absolute rounded-full ${colorClass}`}
+            style={{
+              left: `${element.x}%`,
+              top: `${element.y}%`,
+              width: `${element.size}px`,
+              height: `${element.size}px`,
+            }}
+            animate={{
+              y: [0, -15, 0],
+              opacity: [0.2, 0.6, 0.2],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 4 + element.speed * 2,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "easeInOut",
+              delay: element.id * 0.2,
+            }}
+          />
+        )
+      })}
 
       {/* Large Gradient Orbs */}
       <motion.div
@@ -124,6 +130,14 @@ export function ParallaxBackground({ currentSlide }: ParallaxBackgroundProps) {
           delay: 3,
         }}
       />
+
+      {/* Optional decorative parallax cards (could be replaced with GRC imagery) */}
+      <motion.div
+        className="absolute left-4 bottom-8 w-48 h-28 rounded-xl bg-slate-800/40 border border-slate-700/50 backdrop-blur-sm"
+        animate={{ y: [-5, 5, -5] }}
+        transition={{ duration: 6, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' }}
+      />
+  {/** Removed top-right decorative card per request **/}
     </div>
   )
 }

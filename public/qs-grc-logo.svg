@@ -1,0 +1,36 @@
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#ee5a24;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#6c5ce7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a29bfe;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="qGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6c5ce7;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background rounded rectangle -->
+  <rect x="5" y="5" width="90" height="90" rx="15" ry="15" fill="url(#bgGradient)" />
+  
+  <!-- White background for Q -->
+  <rect x="15" y="15" width="70" height="60" rx="8" ry="8" fill="white" />
+  
+  <!-- Q Letter -->
+  <g transform="translate(20, 20)">
+    <!-- Outer circle of Q -->
+    <circle cx="30" cy="25" r="20" fill="url(#qGradient)" />
+    
+    <!-- Inner circle (hole) of Q -->
+    <circle cx="30" cy="25" r="12" fill="white" />
+    
+    <!-- Q tail -->
+    <rect x="35" y="35" width="15" height="6" rx="3" ry="3" fill="url(#qGradient)" transform="rotate(45 42.5 38)" />
+  </g>
+  
+  <!-- Chat bubble tail -->
+  <polygon points="45,85 55,95 55,85" fill="url(#bgGradient)" />
+</svg>

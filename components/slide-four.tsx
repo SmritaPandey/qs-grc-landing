@@ -41,7 +41,7 @@ export function SlideFour() {
 
   return (
     <div className="h-full flex items-center justify-center relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-8 relative z-10">
+  <div className="max-w-7xl mx-auto px-8 relative z-10 pt-12 md:pt-16">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -50 }}
@@ -49,7 +49,7 @@ export function SlideFour() {
           transition={{ duration: 1 }}
           className="text-center mb-16"
         >
-          <h1 className="text-6xl font-black mb-6">
+          <h1 className="display-hero font-black mb-6">
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
               Four Pillars
             </span>

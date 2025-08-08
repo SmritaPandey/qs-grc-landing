@@ -5,32 +5,23 @@ import { Shield, Zap, Brain, Lock } from "lucide-react"
 
 export function SlideThree() {
   return (
-    <div className="w-full h-full overflow-y-auto">
-      {/* Main Content Section */}
-      <section className="flex items-center justify-center px-8 py-12 min-h-full">
+    <div className="w-full">
+      {/* Hero Section */}
+      <section className="min-h-screen flex items-center justify-center px-8 py-20">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             {/* Left Side - Title and Description */}
             <div>
-              <motion.div 
-                initial={{ opacity: 0, x: -50 }} 
-                animate={{ opacity: 1, x: 0 }} 
-                transition={{ duration: 1 }}
-              >
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center mr-4">
-                    <span className="text-white font-bold">3</span>
-                  </div>
-                  <h1 className="text-5xl font-black">
-                    <span className="bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
-                      A Unified Platform
-                    </span>
-                    <br />
-                    <span className="text-white">for Unbreakable</span>
-                    <br />
-                    <span className="text-slate-300">Governance</span>
-                  </h1>
-                </div>
+              <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1 }}>
+                <h1 className="display-hero font-black mb-8">
+                  <span className="bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
+                    A Unified Platform
+                  </span>
+                  <br />
+                  <span className="text-white">for Unbreakable</span>
+                  <br />
+                  <span className="text-slate-300">Governance</span>
+                </h1>
               </motion.div>
 
               <motion.div
@@ -53,7 +44,7 @@ export function SlideThree() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.6 }}
-                className="space-y-4 mb-8"
+                className="space-y-4"
               >
                 {[
                   { icon: Brain, text: "AI-Driven Intelligence" },
@@ -74,23 +65,6 @@ export function SlideThree() {
                     <span className="text-slate-300 font-medium">{feature.text}</span>
                   </motion.div>
                 ))}
-              </motion.div>
-
-              {/* Platform Benefits */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 1 }}
-                className="grid grid-cols-2 gap-4"
-              >
-                <div className="bg-cyan-500/10 border border-cyan-500/20 rounded-xl p-4 text-center">
-                  <div className="text-3xl font-bold text-cyan-400 mb-1">99.9%</div>
-                  <div className="text-slate-400 text-sm">Uptime</div>
-                </div>
-                <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 text-center">
-                  <div className="text-3xl font-bold text-blue-400 mb-1">50%</div>
-                  <div className="text-slate-400 text-sm">Cost Reduction</div>
-                </div>
               </motion.div>
             </div>
 
@@ -146,7 +120,7 @@ export function SlideThree() {
                   </div>
                 </div>
 
-                {/* Floating Data Nodes */}
+                {/* Floating Data Nodes - positioned outside the main container */}
                 {[
                   { label: "Finance", position: { top: "-20px", left: "-40px" }, delay: 1.2 },
                   { label: "IT", position: { top: "-20px", right: "-40px" }, delay: 1.4 },
@@ -164,41 +138,29 @@ export function SlideThree() {
                     <div className="bg-slate-700/90 backdrop-blur-sm border border-slate-600 rounded-lg px-3 py-1.5">
                       <span className="text-slate-300 text-xs font-medium">{node.label}</span>
                     </div>
-                    
-                    {/* Connection Lines */}
-                    <motion.div
-                      className="absolute top-1/2 left-1/2 w-8 h-px bg-gradient-to-r from-cyan-400/50 to-transparent"
-                      initial={{ opacity: 0, scaleX: 0 }}
-                      animate={{ opacity: 1, scaleX: 1 }}
-                      transition={{ duration: 1, delay: node.delay + 0.3 }}
-                      style={{
-                        transformOrigin: '0 50%',
-                        transform: 'translate(-50%, -50%) rotate(45deg)'
-                      }}
-                    />
                   </motion.div>
                 ))}
               </motion.div>
-
-              {/* Background Effects */}
-              <div className="absolute inset-0 opacity-20 pointer-events-none">
-                <motion.div
-                  className="absolute top-1/4 left-1/4 w-64 h-64 bg-cyan-500/30 rounded-full blur-3xl"
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [0.2, 0.4, 0.2],
-                  }}
-                  transition={{
-                    duration: 8,
-                    repeat: Number.POSITIVE_INFINITY,
-                    ease: "easeInOut",
-                  }}
-                />
-              </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Background Effects */}
+      <div className="absolute inset-0 opacity-20">
+        <motion.div
+          className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/30 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "easeInOut",
+          }}
+        />
+      </div>
     </div>
   )
 }

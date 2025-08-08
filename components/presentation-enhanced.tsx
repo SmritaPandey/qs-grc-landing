@@ -1,10 +1,8 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback } from "react"
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { ParallaxBackground } from "@/components/parallax-background"
-import { ThreeBackground } from "@/components/ui/three-background"
-import { BlobGlass } from "@/components/ui/blob-glass"
 import { NavigationArrows } from "@/components/navigation-arrows"
 import { ProgressBar } from "@/components/progress-bar"
 import { PresentationControls } from "@/components/presentation-controls"
@@ -13,7 +11,6 @@ import { PresentationControls } from "@/components/presentation-controls"
 import { SlideOne } from "@/components/slide-one"
 import { SlideTwo } from "@/components/slide-two"
 import { SlideThree } from "@/components/slide-three"
-import { SlideAbout } from "@/components/slide-about"
 import { SlideFour } from "@/components/slide-four"
 import { SlideFive } from "@/components/slide-five"
 import { SlideSix } from "@/components/slide-six"
@@ -21,13 +18,12 @@ import { SlideSeven } from "@/components/slide-seven"
 import { SlideEight } from "@/components/slide-eight"
 import { SlideNine } from "@/components/slide-nine"
 import { SlideTen } from "@/components/slide-ten"
-import { SlideElevenEnhanced } from "@/components/slide-eleven-enhanced"
+import { SlideEleven } from "@/components/slide-eleven"
 
 const slides = [
   { component: SlideOne, title: "The Future of Trust" },
   { component: SlideTwo, title: "The Hidden Costs" },
   { component: SlideThree, title: "One Platform" },
-  { component: SlideAbout, title: "About QS-GRC" },
   { component: SlideFour, title: "Core Pillars" },
   { component: SlideFive, title: "AI Compliance" },
   { component: SlideSix, title: "Predictive Risk" },
@@ -35,7 +31,7 @@ const slides = [
   { component: SlideEight, title: "Trusted Transparency" },
   { component: SlideNine, title: "Case Study" },
   { component: SlideTen, title: "Implementation" },
-  { component: SlideElevenEnhanced, title: "Start Your Journey" },
+  { component: SlideEleven, title: "Call to Action" },
 ]
 
 export function Presentation() {
@@ -43,9 +39,7 @@ export function Presentation() {
   const [direction, setDirection] = useState(0)
   const [autoplay, setAutoplay] = useState(false)
   const [isScrolling, setIsScrolling] = useState(false)
-  const [scrollProgress, setScrollProgress] = useState(0)
   const slideContainerRef = useRef<HTMLDivElement>(null)
-  const prefersReducedMotion = useReducedMotion()
 
   const nextSlide = useCallback(() => {
     if (currentSlide < slides.length - 1) {
@@ -68,30 +62,16 @@ export function Presentation() {
     }
   }, [currentSlide])
 
-  // Enhanced scroll tracking for parallax effects
-  const handleScroll = useCallback(() => {
-    const slideContainer = slideContainerRef.current
-    if (!slideContainer) return
-
-    const { scrollTop, scrollHeight, clientHeight } = slideContainer
-    const progress = scrollTop / (scrollHeight - clientHeight)
-    setScrollProgress(progress)
-  }, [])
-
-  // Enhanced scroll handling for page-to-page navigation with parallax
+  // Enhanced scroll handling for page-to-page navigation
   const handleWheel = useCallback((e: WheelEvent) => {
     if (isScrolling) return
-    if (prefersReducedMotion) return // avoid hijacking scroll for reduced motion users
+    
     const slideContainer = slideContainerRef.current
     if (!slideContainer) return
 
     const { scrollTop, scrollHeight, clientHeight } = slideContainer
     const isAtTop = scrollTop === 0
     const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10
-
-    // Create parallax effect during scroll
-    const scrollDirection = e.deltaY > 0 ? 1 : -1
-    const parallaxOffset = scrollTop * 0.5
 
     // Only navigate between slides when at the top or bottom of current slide
     if (e.deltaY > 0 && isAtBottom) {
@@ -101,11 +81,13 @@ export function Presentation() {
         setIsScrolling(true)
         nextSlide()
         
-        // Reset scroll position to top for next slide with smooth transition
+        // Reset scroll position to top for next slide
         setTimeout(() => {
-          slideContainerRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+          if (slideContainerRef.current) {
+            slideContainerRef.current.scrollTop = 0
+          }
           setIsScrolling(false)
-        },  prefersReducedMotion ? 200 : 600)
+        }, 500)
       }
     } else if (e.deltaY < 0 && isAtTop) {
       // Scrolling up and at top - go to previous slide
@@ -114,15 +96,16 @@ export function Presentation() {
         setIsScrolling(true)
         prevSlide()
         
-        // Set scroll position to bottom for previous slide with smooth transition
+        // Set scroll position to bottom for previous slide
         setTimeout(() => {
-          const sc = slideContainerRef.current
-          if (sc) sc.scrollTo({ top: sc.scrollHeight, behavior: 'smooth' })
+          if (slideContainerRef.current) {
+            slideContainerRef.current.scrollTop = slideContainerRef.current.scrollHeight
+          }
           setIsScrolling(false)
-        }, prefersReducedMotion ? 200 : 600)
+        }, 500)
       }
     }
-  }, [currentSlide, isScrolling, nextSlide, prevSlide, prefersReducedMotion])
+  }, [currentSlide, isScrolling, nextSlide, prevSlide])
 
   // Touch handling for mobile devices
   const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null)
@@ -176,10 +159,10 @@ export function Presentation() {
       } else {
         setAutoplay(false)
       }
-    }, prefersReducedMotion ? 10000 : 8000)
+    }, 8000) // 8 seconds per slide for better readability
 
     return () => clearInterval(timer)
-  }, [currentSlide, autoplay, nextSlide, prefersReducedMotion])
+  }, [currentSlide, autoplay, nextSlide])
 
   // Keyboard navigation
   useEffect(() => {
@@ -220,40 +203,42 @@ export function Presentation() {
     return () => window.removeEventListener("keydown", handleKeyPress)
   }, [currentSlide, autoplay, isScrolling, nextSlide, prevSlide, goToSlide])
 
-  // Add scroll and touch event listeners with parallax support
+  // Add scroll and touch event listeners
   useEffect(() => {
     const slideContainer = slideContainerRef.current
     if (!slideContainer) return
 
     slideContainer.addEventListener("wheel", handleWheel, { passive: false })
-    slideContainer.addEventListener("scroll", handleScroll, { passive: true })
     slideContainer.addEventListener("touchstart", handleTouchStart, { passive: true })
     slideContainer.addEventListener("touchend", handleTouchEnd, { passive: true })
 
     return () => {
       slideContainer.removeEventListener("wheel", handleWheel)
-      slideContainer.removeEventListener("scroll", handleScroll)
       slideContainer.removeEventListener("touchstart", handleTouchStart)
       slideContainer.removeEventListener("touchend", handleTouchEnd)
     }
-  }, [handleWheel, handleScroll, handleTouchStart, handleTouchEnd])
+  }, [handleWheel, handleTouchStart, handleTouchEnd])
 
   const slideVariants = {
-    enter: (dir: number) => ({
-      x: prefersReducedMotion ? 0 : dir > 0 ? "100%" : "-100%",
+    enter: (direction: number) => ({
+      x: direction > 0 ? "100%" : "-100%",
       opacity: 0,
-      scale: prefersReducedMotion ? 1 : 0.98,
-      filter: prefersReducedMotion ? "none" : "blur(4px)",
+      scale: 0.98,
+      filter: "blur(4px)",
     }),
     center: {
-      zIndex: 1, x: 0, opacity: 1, scale: 1, filter: "blur(0px)",
+      zIndex: 1,
+      x: 0,
+      opacity: 1,
+      scale: 1,
+      filter: "blur(0px)",
     },
-    exit: (dir: number) => ({
+    exit: (direction: number) => ({
       zIndex: 0,
-      x: prefersReducedMotion ? 0 : dir < 0 ? "100%" : "-100%",
+      x: direction < 0 ? "100%" : "-100%",
       opacity: 0,
-      scale: prefersReducedMotion ? 1 : 0.98,
-      filter: prefersReducedMotion ? "none" : "blur(4px)",
+      scale: 0.98,
+      filter: "blur(4px)",
     }),
   }
 
@@ -261,15 +246,9 @@ export function Presentation() {
 
   return (
     <div className="relative w-full h-screen overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Animated Backgrounds */}
+      {/* Animated Background */}
       <div className="absolute inset-0">
         <ParallaxBackground currentSlide={currentSlide} />
-        <ThreeBackground currentSlide={currentSlide} />
-        {/* Decorative overlays (kept minimal; ribbon moved to Slide One) */}
-        <div className="absolute inset-0 pointer-events-none">
-          <BlobGlass className="-left-40 -top-24" hue={190} />
-          <BlobGlass className="right-[-16rem] bottom-[-10rem] w-[28rem]" hue={300} />
-        </div>
       </div>
 
       {/* Enhanced Progress Bar */}
@@ -277,25 +256,6 @@ export function Presentation() {
 
       {/* Main Slide Container with Enhanced Scrolling */}
       <div className="relative w-full h-full overflow-hidden">
-        {/* Listen to header navigation events */}
-        <NavigationListener onNavigate={({ slide, anchor }) => {
-          if (typeof slide === 'number') {
-            setDirection(slide > currentSlide ? 1 : -1)
-            setCurrentSlide(slide)
-            // Scroll to anchor after a tick to allow slide render
-            setTimeout(() => {
-              if (anchor) {
-                const el = document.getElementById(anchor)
-                if (el) {
-                  el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                }
-              } else {
-                // default to top
-                slideContainerRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
-              }
-            }, prefersReducedMotion ? 50 : 250)
-          }
-        }} />
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={currentSlide}
@@ -305,42 +265,28 @@ export function Presentation() {
             animate="center"
             exit="exit"
             transition={{
-              x: prefersReducedMotion ? { duration: 0.2 } : { type: "spring", stiffness: 250, damping: 25, duration: 0.6 },
-              opacity: { duration: 0.3 },
-              scale: { duration: 0.3 },
-              filter: { duration: 0.2 },
+              x: { 
+                type: "spring", 
+                stiffness: 250, 
+                damping: 25,
+                duration: 0.6
+              },
+              opacity: { duration: 0.5 },
+              scale: { duration: 0.5 },
+              filter: { duration: 0.3 },
             }}
             className="absolute inset-0 w-full h-full"
           >
             <div 
               ref={slideContainerRef}
-              className="w-full h-full overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-cyan-500/50 scrollbar-track-slate-800/30 scroll-smooth overscroll-y-contain"
-              style={{ scrollBehavior: 'smooth' }}
+              className="w-full h-full overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-cyan-500/50 scrollbar-track-slate-800/30 scroll-smooth"
+              style={{
+                scrollBehavior: 'smooth',
+              }}
             >
-              <motion.div 
-                className="min-h-full relative"
-                style={{ transform: prefersReducedMotion ? undefined : `translateY(${scrollProgress * -20}px)` }}
-                transition={{ type: "spring", stiffness: 100, damping: 15 }}
-              >
-                {/* Parallax Background Layer */}
-                <motion.div
-                  className="absolute inset-0 pointer-events-none"
-                  style={{
-                    transform: prefersReducedMotion ? undefined : `translateY(${scrollProgress * -50}px) scale(${1 + scrollProgress * 0.1})`,
-                    opacity: prefersReducedMotion ? 1 : 1 - scrollProgress * 0.3,
-                  }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/5 to-blue-600/10" />
-                </motion.div>
-                
-                {/* Main Content with Parallax */}
-                <motion.div
-                  style={{ transform: prefersReducedMotion ? undefined : `translateY(${scrollProgress * 10}px)` }}
-                  transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                >
-                  <CurrentSlideComponent />
-                </motion.div>
-              </motion.div>
+              <div className="min-h-full">
+                <CurrentSlideComponent />
+              </div>
             </div>
           </motion.div>
         </AnimatePresence>
@@ -414,17 +360,4 @@ export function Presentation() {
       )}
     </div>
   )
-}
-
-// Helper component to bridge custom window event to React
-function NavigationListener({ onNavigate }: { onNavigate: (detail: { slide?: number; anchor?: string }) => void }) {
-  useEffect(() => {
-    const handler = (e: Event) => {
-      const ce = e as CustomEvent<{ slide?: number; anchor?: string }>
-      onNavigate(ce.detail || {})
-    }
-    window.addEventListener('qs-grc:navigate', handler as EventListener)
-    return () => window.removeEventListener('qs-grc:navigate', handler as EventListener)
-  }, [onNavigate])
-  return null
 }
