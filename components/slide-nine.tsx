@@ -13,7 +13,7 @@ export function SlideNine() {
 
   return (
     <div className="h-full flex items-center justify-center relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-8 relative z-10 py-16 md:py-20">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -50 }}

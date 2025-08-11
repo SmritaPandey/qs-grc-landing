@@ -15,7 +15,7 @@ export function SlideSix() {
   return (
     <div className="w-full h-full overflow-y-auto">
       {/* Hero Section */}
-      <section className="flex items-center justify-center px-8 py-12 min-h-full">
+  <section className="flex items-center justify-center px-8 py-16 md:py-20 min-h-full">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             {/* Left Side - Content */}
@@ -222,7 +222,7 @@ export function SlideSix() {
       </section>
 
       {/* Risk Analysis Section */}
-      <section className="py-20 px-8">
+  <section className="py-24 px-8">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -263,7 +263,7 @@ export function SlideSix() {
                 transition={{ duration: 0.8, delay: index * 0.2 }}
                 viewport={{ once: true }}
               >
-                <Card3D glowColor={feature.color} className="p-8 text-center h-full">
+                <Card3D glowColor={feature.color as any} className="p-8 text-center h-full">
                   <feature.icon className={`w-12 h-12 text-${feature.color}-400 mx-auto mb-4`} />
                   <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
                   <p className="text-slate-300 leading-relaxed">{feature.description}</p>

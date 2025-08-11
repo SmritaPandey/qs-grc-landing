@@ -85,7 +85,7 @@ export default function AboutPage() {
                 </div>
                 <div>
                   <h3 className="text-white font-semibold text-2xl mb-1">Vikash Sharma</h3>
-                  <p className="text-cyan-300 font-medium mb-2">Chief Strategy Advisor</p>
+                  <p className="text-cyan-300 font-medium mb-2">Co-founder and President</p>
                   <p className="text-slate-300">
                     A dharma‑driven technocrat fusing national‑scale innovation with ethical governance—championing fraud‑resilient systems, mindful tech, and green innovation.
                   </p>

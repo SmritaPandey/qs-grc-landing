@@ -47,7 +47,7 @@ export const companyContent: CompanyContent = {
     },
     {
       name: "Vikash Sharma",
-      title: "Chief Strategy Advisor",
+  title: "Co-founder and President",
       intro:
         "A dharma-driven technocrat aligning national-scale innovation with ethical governance—advocating fraud resilience, mindful tech, and green innovation.",
   photoSrc: "/founders/vikash.jpg?v=20250808",

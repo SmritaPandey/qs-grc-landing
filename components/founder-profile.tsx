@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion"
 import { Linkedin, Twitter, Mail } from "lucide-react"
-import Image from "next/image"
 
 interface FounderProfileProps {
   className?: string
@@ -30,13 +29,11 @@ export function FounderProfile({ className, name = "Smrita Pandey", title = "Fou
           whileHover={{ scale: 1.05 }}
           className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-cyan-400/30 shadow-lg"
         >
-          <Image
+          <img
             src={photoSrc}
             alt={`${name} – ${title}`}
-            fill
-            sizes="112px"
-            className={`object-cover ${photoClassName}`}
-            priority
+            className={`absolute inset-0 w-full h-full object-cover ${photoClassName}`}
+            loading="eager"
           />
         </motion.div>
 

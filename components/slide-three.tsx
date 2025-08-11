@@ -7,7 +7,7 @@ export function SlideThree() {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <section className="min-h-screen flex items-center justify-center px-8 py-20">
+  <section className="min-h-screen flex items-center justify-center px-8 py-24">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             {/* Left Side - Title and Description */}

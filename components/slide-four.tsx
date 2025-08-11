@@ -41,7 +41,7 @@ export function SlideFour() {
 
   return (
     <div className="h-full flex items-center justify-center relative overflow-hidden">
-  <div className="max-w-7xl mx-auto px-8 relative z-10 pt-12 md:pt-16">
+  <div className="max-w-7xl mx-auto px-8 relative z-10 pt-16 md:pt-20 pb-12 md:pb-16">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -50 }}

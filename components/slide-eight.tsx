@@ -6,7 +6,7 @@ import { Users, Eye, FileText, TrendingUp, Shield, CheckCircle } from "lucide-re
 export function SlideEight() {
   return (
     <div className="h-full flex items-center justify-center relative overflow-hidden">
-  <div className="max-w-7xl mx-auto px-8 relative z-10 pt-12 md:pt-16">
+  <div className="max-w-7xl mx-auto px-8 relative z-10 pt-16 md:pt-20 pb-12 md:pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Side - Content */}
           <div>

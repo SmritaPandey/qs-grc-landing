@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { ArrowRight, Shield, Globe, Zap, Sparkles, CheckCircle, Star } from "lucide-react"
 import { GlowingButton } from "@/components/glowing-button"
@@ -52,22 +53,20 @@ export function SlideOne() {
     { number: "100+", label: "Agencies Served", color: "cyan" as const },
   ] as const;
 
-  // Visual screenshots to showcase GRC UI (drop files into /public/grc with these names)
+  // Visual screenshots to showcase GRC UI (using images added to /public)
   const visuals: { src: string; alt: string }[] = [
-    { src: "/grc/streamline-dashboard.png", alt: "GRC Dashboard overview" },
-    { src: "/grc/streamline-heatmap.png", alt: "Risk Heatmap matrix" },
-    { src: "/grc/streamline-governance.png", alt: "Governance and policies" },
-    { src: "/grc/streamline-reports.png", alt: "Reports and compliance dashboards" },
-    { src: "/grc/grc-dashboard-1.webp", alt: "GRC dashboard UI 1" },
-    { src: "/grc/grc-dashboard-2.webp", alt: "GRC dashboard UI 2" },
-    { src: "/grc/grc-audit-log.webp", alt: "GRC audit logs" },
-    { src: "/grc/grc-risk-heatmap.webp", alt: "GRC risk heatmap" },
+    { src: "/dashboard%20screen.png", alt: "Dashboard screen" },
+    { src: "/risk%20screen.png", alt: "Risk screen" },
+    { src: "/governance%20screen.png", alt: "Governance screen" },
+    { src: "/compliance%20screen.png", alt: "Compliance screen" },
+    { src: "/policy%20screen.png", alt: "Policy screen" },
+    { src: "/audit%20screen.png", alt: "Audit screen" },
   ]
 
   return (
     <div className="w-full min-h-screen">
       {/* Hero Section - Above the Fold */}
-      <section className="min-h-screen flex items-center justify-center section-padding relative overflow-hidden">
+  <section className="min-h-screen flex items-center justify-center section-padding relative overflow-hidden py-16 md:py-20">
   {/* Removed background overlay ribbon; ribbon now lives as an in-flow section below */}
         {/* Parallax Background Elements */}
         <motion.div
@@ -306,7 +305,7 @@ export function SlideOne() {
       </section>
 
   {/* Sliding Audit Ribbon Section (in-flow) */}
-  <section aria-label="Audit capabilities" className="py-8 px-4 sm:px-8">
+  <section aria-label="Audit capabilities" className="py-12 px-4 sm:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="-mx-8 z-10 relative rounded-xl">
             <AuditRibbon direction="left" overlay={false} />
@@ -314,50 +313,16 @@ export function SlideOne() {
         </div>
       </section>
 
-  {/* GRC Visuals Bento Grid Section */}
-  <section aria-label="GRC Visuals" className="py-8 px-4 sm:px-8">
+  {/* GRC Visuals Carousel Section */}
+  <section aria-label="GRC Screens Carousel" className="py-12 px-4 sm:px-8">
         <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="grid grid-cols-6 gap-3 auto-rows-[8rem] md:auto-rows-[10rem]"
-          >
-            {visuals.map((v, i) => (
-              <div
-                key={v.src}
-                className={
-                  "rounded-xl overflow-hidden bg-slate-800/40 border border-slate-700/50 relative group " +
-                  (i % 8 === 0 ? "col-span-6 md:col-span-4 row-span-2" :
-                   i % 8 === 1 ? "col-span-3 row-span-1" :
-                   i % 8 === 2 ? "col-span-3 row-span-1" :
-                   i % 8 === 3 ? "col-span-6 md:col-span-2 row-span-2" :
-                   i % 8 === 4 ? "col-span-3 row-span-1" :
-                   i % 8 === 5 ? "col-span-3 row-span-1" :
-                   i % 8 === 6 ? "col-span-6 md:col-span-3 row-span-2" :
-                                  "col-span-6 md:col-span-3 row-span-2")
-                }
-                title={v.alt}
-                aria-label={v.alt}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={v.src} alt={v.alt} className="w-full h-full object-cover" onError={(e) => {
-                  const el = e.currentTarget as HTMLImageElement
-                  el.style.display = 'none'
-                  el.parentElement && (el.parentElement.style.background = 'linear-gradient(135deg, rgba(6,182,212,0.15), rgba(59,130,246,0.15))')
-                }} />
-                <div className="absolute inset-x-2 bottom-2 px-2 py-1 rounded-md bg-slate-900/70 text-[11px] text-slate-200 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                  {v.alt}
-                </div>
-              </div>
-            ))}
-          </motion.div>
+          {/* Scroll-driven, sticky carousel: changes slides as the user scrolls through this section */}
+          <CarouselScroll visuals={visuals} />
         </div>
       </section>
 
   {/* Features Section */}
-  <section id="features" className="py-20 px-8">
+  <section id="features" className="py-24 px-8">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -405,7 +370,7 @@ export function SlideOne() {
       </section>
 
   {/* Stats Section */}
-  <section id="stats" className="py-20 px-8">
+  <section id="stats" className="py-24 px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
@@ -437,6 +402,97 @@ export function SlideOne() {
           </div>
         </div>
       </section>
+    </div>
+  )
+}
+
+type Visual = { src: string; alt: string }
+
+function CarouselScroll({ visuals }: { visuals: Visual[] }) {
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const [index, setIndex] = useState(0)
+  const cooldownRef = useRef(0)
+  const wheelAccumRef = useRef(0)
+
+  // Auto-advance timer
+  useEffect(() => {
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % visuals.length)
+    }, 6000) // slower auto-timer (5s or more)
+    return () => clearInterval(id)
+  }, [visuals.length])
+
+  // Wheel controls to move top->down or bottom->up between slides
+  const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    const now = Date.now()
+    if (now < cooldownRef.current) return
+    wheelAccumRef.current += e.deltaY
+    const threshold = 80
+    if (wheelAccumRef.current > threshold) {
+      setIndex((i) => Math.min(i + 1, visuals.length - 1))
+      wheelAccumRef.current = 0
+      cooldownRef.current = now + 500
+    } else if (wheelAccumRef.current < -threshold) {
+      setIndex((i) => Math.max(i - 1, 0))
+      wheelAccumRef.current = 0
+      cooldownRef.current = now + 500
+    }
+  }
+
+  const current = visuals[index]
+
+  return (
+    <div ref={containerRef} className="relative h-[250vh] md:h-[300vh]">
+      <div
+        className="sticky top-20 md:top-24 h-[calc(100vh-6rem)] md:h-[calc(100vh-8rem)] flex items-center justify-center"
+        onWheel={onWheel}
+      >
+        <motion.div
+          key={current.src}
+          initial={{ opacity: 0, y: 30, scale: 0.99 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="relative w-full h-[60vh] md:h-[70vh] max-w-6xl rounded-2xl overflow-hidden border border-slate-700/50 bg-slate-800/40 shadow-2xl px-4 md:px-6 pt-8 pb-10"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={current.src}
+            alt={current.alt}
+            className="w-full h-full object-contain bg-slate-900"
+            onError={(e) => {
+              const el = e.currentTarget as HTMLImageElement
+              el.style.display = 'none'
+              if (el.parentElement) {
+                el.parentElement.style.background = 'linear-gradient(135deg, rgba(6,182,212,0.15), rgba(59,130,246,0.15))'
+              }
+            }}
+            loading="lazy"
+          />
+
+          {/* Bottom caption as a comment */}
+          <div className="absolute inset-x-0 bottom-0">
+            <div className="mx-auto max-w-none">
+              <div className="bg-slate-950/70 backdrop-blur-sm text-slate-200 text-sm px-4 py-2 text-center">
+                {current.alt}
+              </div>
+            </div>
+          </div>
+
+          {/* Simple progress dots */}
+          <div className="absolute left-1/2 -translate-x-1/2 bottom-14 flex gap-2">
+            {visuals.map((_, i) => (
+              <span
+                key={i}
+                className={
+                  "h-2 w-2 rounded-full border border-slate-400/40 " +
+                  (i === index ? "bg-cyan-400" : "bg-slate-600/50")
+                }
+                aria-label={i === index ? "Current slide" : `Go to slide ${i + 1}`}
+              />
+            ))}
+          </div>
+        </motion.div>
+      </div>
     </div>
   )
 }

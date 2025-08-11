@@ -94,7 +94,7 @@ export function SlideEleven() {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 section-padding">
+  <div className="relative z-10 section-padding py-16 md:py-20">
         <div className="container-fluid">
           
           {/* Hero Section with Clear CTA */}

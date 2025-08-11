@@ -35,7 +35,7 @@ export function SlideTwo() {
   return (
     <div className="w-full h-full overflow-y-auto">
       {/* Hero Section */}
-      <section className="h-full flex items-center justify-center px-8 py-12">
+  <section className="h-full flex items-center justify-center px-8 py-16 md:py-20">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center h-full">
             {/* Left Side - Title and Description */}
@@ -106,8 +106,8 @@ export function SlideTwo() {
                     <div className={`w-8 h-8 bg-gradient-to-r ${problem.color} rounded-lg flex items-center justify-center mx-auto mb-3`}>
                       <problem.icon className="w-4 h-4 text-white" />
                     </div>
-                    <h3 className="text-sm font-bold text-white mb-2">{problem.title}</h3>
-                    <p className="text-slate-300 text-xs leading-relaxed">{problem.description}</p>
+                    <h3 className="text-xs font-bold text-white mb-2">{problem.title}</h3>
+                    <p className="text-slate-300 text-[11px] leading-snug">{problem.description}</p>
                   </Card3D>
                 </motion.div>
               ))}
